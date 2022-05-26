@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.desafio.meutudo.Entity.Cliente;
 import br.com.desafio.meutudo.dto.ClienteDTO;
+import br.com.desafio.meutudo.dto.TransacaoDTO;
 import br.com.desafio.meutudo.service.Service;
 
 @RestController
@@ -32,5 +33,10 @@ public class Controller {
 			return ResponseEntity.notFound().build();
 		}
 		return ResponseEntity.status(HttpStatus.OK).body(cliente);
+	}
+	
+	@RequestMapping(value = "/transf", method = RequestMethod.POST)
+	public void transferencia(@RequestBody TransacaoDTO transacaoDTO) {
+		service.transferencia(transacaoDTO);
 	}
 }
