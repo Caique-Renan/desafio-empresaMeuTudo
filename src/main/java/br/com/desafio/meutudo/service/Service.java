@@ -37,13 +37,13 @@ public class Service {
 		return clienteDTO;
 	}
 
-	public void transferencia(TransacaoDTO transacaoDTO) {
+	public Long transferencia(TransacaoDTO transacaoDTO) {
+		
 //		subtrai o valor do remetente 
 		Cliente clienteRemetente = clienteRepository.findById(transacaoDTO.getContaRemetente()).get();
 		Double subtraiValor = clienteRemetente.getSaldoConta() - transacaoDTO.getValorTransacao();
 		clienteRemetente.setSaldoConta(subtraiValor);
 		clienteRepository.save(clienteRemetente);
-
 //		ADD o valor ao destinatario 
 		Cliente clienteDestino = clienteRepository.findById(transacaoDTO.getContaDestinatario()).get();
 		Double novoSaldo = clienteDestino.getSaldoConta() + transacaoDTO.getValorTransacao();
@@ -55,8 +55,34 @@ public class Service {
 		transacao.setContaDestinatario(clienteDestino.getContaCliente());
 		transacao.setValorTransacao(transacaoDTO.getValorTransacao());
 		transacao.setDataTransacao(Calendar.getInstance().getTime());
-		transacaoRepository.save(transacao);
-
+		Transacao savedTransacao = transacaoRepository.save(transacao);
+		
+		return savedTransacao.getIdTransacoes();
 	}
+	
+	public Long transferenciaRevert(TransacaoDTO transacaoDTO) {
+		Transacao busca = transacaoRepository.findById(transacaoDTO.getIdTransacoes()).get();
+//		subtrai o valor do remetente 
+		Cliente clienteRemetente = clienteRepository.findById(busca.getContaDestinatario()).get();
+		Double subtraiValor = clienteRemetente.getSaldoConta() - busca.getValorTransacao();
+		clienteRemetente.setSaldoConta(subtraiValor);
+		clienteRepository.save(clienteRemetente);
+//		ADD o valor ao destinatario 
+		Cliente clienteDestino = clienteRepository.findById(busca.getContaRemetente()).get();
+		Double novoSaldo = clienteDestino.getSaldoConta() + busca.getValorTransacao();
+		clienteDestino.setSaldoConta(novoSaldo);
+		clienteRepository.save(clienteDestino);
+//		Cria a linha na entidade transacao
+		Transacao transacao = new Transacao();
+		transacao.setContaRemetente(clienteRemetente.getContaCliente());
+		transacao.setContaDestinatario(clienteDestino.getContaCliente());
+		transacao.setValorTransacao(busca.getValorTransacao());
+		transacao.setDataTransacao(Calendar.getInstance().getTime());
+		Transacao savedTransacao = transacaoRepository.save(transacao);
+		
+		return savedTransacao.getIdTransacoes();
+		
+	}
+	
 
 }

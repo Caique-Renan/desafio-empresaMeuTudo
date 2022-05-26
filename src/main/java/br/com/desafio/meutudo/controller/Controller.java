@@ -36,7 +36,14 @@ public class Controller {
 	}
 	
 	@RequestMapping(value = "/transf", method = RequestMethod.POST)
-	public void transferencia(@RequestBody TransacaoDTO transacaoDTO) {
-		service.transferencia(transacaoDTO);
+	public ResponseEntity<?> transferencia(@RequestBody TransacaoDTO transacaoDTO) {
+		Long responseTransf = service.transferencia(transacaoDTO);
+		return ResponseEntity.status(HttpStatus.OK).body(responseTransf);
+	}
+	
+	@RequestMapping(value = "/revert/transf", method = RequestMethod.POST)
+	public ResponseEntity<?> revertTransf(@RequestBody TransacaoDTO transacaoDTO) {
+		Long responseRevert = service.transferenciaRevert(transacaoDTO);
+		return ResponseEntity.status(HttpStatus.OK).body(responseRevert);
 	}
 }
