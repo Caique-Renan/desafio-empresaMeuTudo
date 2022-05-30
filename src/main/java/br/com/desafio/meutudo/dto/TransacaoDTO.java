@@ -1,6 +1,10 @@
 package br.com.desafio.meutudo.dto;
 
-import java.sql.Date;
+import java.util.Date;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class TransacaoDTO {
 
@@ -8,7 +12,14 @@ public class TransacaoDTO {
 	private Long contaRemetente;
 	private Long contaDestinatario;
 	private Integer valorTransacao;
+	
+	@DateTimeFormat(pattern = "dd/MM/yyyy")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, 
+	pattern = "dd/MM/yyyy", locale = "pt-BR", timezone = "Brazil/East")
 	private Date dataTransacao;
+	
+	private Integer quantidadeParcela;
+	private Integer numeroParcela;
 
 	public Long getIdTransacoes() {
 		return idTransacoes;
@@ -50,12 +61,28 @@ public class TransacaoDTO {
 		this.dataTransacao = dataTransacao;
 	}
 
+	public Integer getQuantidadeParcela() {
+		return quantidadeParcela;
+	}
+
+	public void setQuantidadeParcela(Integer quantidadeParcela) {
+		this.quantidadeParcela = quantidadeParcela;
+	}
+
+	public Integer getNumeroParcela() {
+		return numeroParcela;
+	}
+
+	public void setNumeroParcela(Integer numeroParcela) {
+		this.numeroParcela = numeroParcela;
+	}
+
 	@Override
 	public String toString() {
 		return String.format(
 				"TransacaoDTO [idTransacoes=%s, contaRemetente=%s, "
-						+ "contaDestinatario=%s, valorTransacao=%s, dataTransacao=%s]",
-				idTransacoes, contaRemetente, contaDestinatario, valorTransacao, dataTransacao);
+						+ "contaDestinatario=%s, valorTransacao=%s, dataTransacao=%s, parcelaTransacao=%s]",
+				idTransacoes, contaRemetente, contaDestinatario, valorTransacao, dataTransacao, quantidadeParcela);
 	}
 
 }

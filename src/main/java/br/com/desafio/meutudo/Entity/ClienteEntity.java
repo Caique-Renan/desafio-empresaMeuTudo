@@ -13,7 +13,7 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 @Entity
 @Table(name = "TB_CLIENTE")
-public class Cliente {
+public class ClienteEntity {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
