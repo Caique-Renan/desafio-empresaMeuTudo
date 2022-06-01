@@ -1,11 +1,5 @@
 package br.com.desafio.meutudo.service;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.util.Date;
-import java.util.Iterator;
-
 import org.springframework.beans.factory.annotation.Autowired;
 
 import br.com.desafio.meutudo.Entity.ClienteEntity;
@@ -27,7 +21,7 @@ public class Service {
 	public ClienteEntity salvarCliente(ClienteEntity cliente) {
 		return clienteRepository.save(cliente);
 	}
-
+// Metodo tipo GET que obtém valor de saldo do usuário.
 	public ClienteDTO mostraSaldo(Long id) {
 		ClienteEntity cliente = new ClienteEntity();
 		ClienteDTO clienteDTO = new ClienteDTO();
@@ -41,6 +35,7 @@ public class Service {
 		return clienteDTO;
 	}
 
+//	Método para efetuar transferencias entre contas já cadastradas
 	public Long transferencia(TransacaoDTO transacaoDTO) {
 
 //		subtrai o valor do remetente 
@@ -64,6 +59,7 @@ public class Service {
 		return savedTransacao.getIdTransacoes();
 	}
 
+//	Método para reverter transferencia.
 	public Long transferenciaRevert(TransacaoDTO transacaoDTO) {
 		TransacaoEntity busca = transacaoRepository.findById(transacaoDTO.getIdTransacoes()).get();
 //		subtrai o valor do remetente 
@@ -88,6 +84,7 @@ public class Service {
 
 	}
 
+//	Método para agendamento de transferencia, efetuando 3 lançamentos dentro do banco de dados
 	public Long agendaTransf(TransacaoDTO transacaoDTO) {
 		
 //		Busca cliente remetente
